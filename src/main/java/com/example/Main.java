@@ -36,7 +36,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -94,6 +96,24 @@ public class Main {
     @ResponseBody
     Object newActivity(@RequestBody Activity activity) {
         return ResponseDTO.ok(activity);
+    }
+
+    @RequestMapping("/activity/create")
+    @ResponseBody
+    Object createActivity(HttpServletRequest request) {
+        try {
+            StringBuilder buffer = new StringBuilder();
+            BufferedReader reader = null;
+            reader = request.getReader();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+            }
+            String payload = buffer.toString();
+            return ResponseDTO.ok(payload);
+        } catch (IOException e) {
+            return ResponseDTO.error(e.getMessage());
+        }
     }
 
     @RequestMapping("/db")
