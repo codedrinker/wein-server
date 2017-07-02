@@ -92,8 +92,8 @@ public class Main {
 
     @RequestMapping("/activity/new")
     @ResponseBody
-    Object create(@RequestBody Activity activity) {
-        return activity;
+    Object newActivity(@RequestBody Activity activity) {
+        return ResponseDTO.ok(activity);
     }
 
     @RequestMapping("/db")
