@@ -5,19 +5,20 @@ package com.example.entity;
  */
 
 public class Activity {
-    private String type;
+    private String kind;
     private String title;
     private String description;
     private String date;
     private String time;
     private Location location;
+    private User user;
 
-    public String getType() {
-        return type;
+    public String getKind() {
+        return kind;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getTitle() {
@@ -58,5 +59,13 @@ public class Activity {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

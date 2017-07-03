@@ -41,11 +41,8 @@ import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Map;
 
 @Controller
 @SpringBootApplication
@@ -116,25 +113,49 @@ public class Main {
         }
     }
 
-    @RequestMapping("/db")
-    String db(Map<String, Object> model) {
+    @RequestMapping("/db/migration")
+    @ResponseBody
+    String db() {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)");
-            stmt.executeUpdate("INSERT INTO ticks VALUES (now())");
-            ResultSet rs = stmt.executeQuery("SELECT tick FROM ticks");
+            stmt.executeUpdate("CREATE TABLE activity" +
+                    "(" +
+                    "    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT," +
+                    "    date VARCHAR(50)," +
+                    "    time VARCHAR(50)," +
+                    "    location VARCHAR(1000)," +
+                    "    user VARCHAR(255)," +
+                    "    description VARCHAR(500)," +
+                    "    title VARCHAR(255)," +
+                    "    utime BIGINT(20)," +
+                    "    ctime BIGINT(20)" +
+                    ");");
 
-            ArrayList<String> output = new ArrayList<String>();
-            while (rs.next()) {
-                output.add("Read from DB: " + rs.getTimestamp("tick"));
-            }
+            stmt.executeUpdate("CREATE TABLE participator" +
+                    "(" +
+                    "    user_id VARCHAR(100)," +
+                    "    activity_id INT(11)," +
+                    "    utime BIGINT(20)," +
+                    "    ctime BIGINT(20)" +
+                    ");");
 
-            model.put("records", output);
-            return "db";
+            stmt.executeUpdate("CREATE TABLE user" +
+                    "(" +
+                    "    id VARCHAR(100) PRIMARY KEY NOT NULL," +
+                    "    nickName VARCHAR(200)," +
+                    "    avatarUrl VARCHAR(200)," +
+                    "    gender INT(11)," +
+                    "    province VARCHAR(100)," +
+                    "    city VARCHAR(100)," +
+                    "    country VARCHAR(100)," +
+                    "    utime BIGINT(20)," +
+                    "    ctime BIGINT(20)" +
+                    ");");
+
         } catch (Exception e) {
-            model.put("message", e.getMessage());
             return "error";
         }
+        return "ok";
     }
 
     @Bean
