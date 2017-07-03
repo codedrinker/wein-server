@@ -40,9 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 @Controller
 @SpringBootApplication
@@ -112,52 +110,7 @@ public class Main {
             return ResponseDTO.error(e.getMessage());
         }
     }
-
-    @RequestMapping("/db/migration")
-    @ResponseBody
-    String db() {
-        try (Connection connection = dataSource.getConnection()) {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE activity" +
-                    "(" +
-                    "    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT," +
-                    "    date VARCHAR(50)," +
-                    "    time VARCHAR(50)," +
-                    "    location VARCHAR(1000)," +
-                    "    user VARCHAR(255)," +
-                    "    description VARCHAR(500)," +
-                    "    title VARCHAR(255)," +
-                    "    utime BIGINT(20)," +
-                    "    ctime BIGINT(20)" +
-                    ");");
-
-            stmt.executeUpdate("CREATE TABLE participator" +
-                    "(" +
-                    "    user_id VARCHAR(100)," +
-                    "    activity_id INT(11)," +
-                    "    utime BIGINT(20)," +
-                    "    ctime BIGINT(20)" +
-                    ");");
-
-            stmt.executeUpdate("CREATE TABLE user" +
-                    "(" +
-                    "    id VARCHAR(100) PRIMARY KEY NOT NULL," +
-                    "    nickName VARCHAR(200)," +
-                    "    avatarUrl VARCHAR(200)," +
-                    "    gender INT(11)," +
-                    "    province VARCHAR(100)," +
-                    "    city VARCHAR(100)," +
-                    "    country VARCHAR(100)," +
-                    "    utime BIGINT(20)," +
-                    "    ctime BIGINT(20)" +
-                    ");");
-
-        } catch (Exception e) {
-            return "error";
-        }
-        return "ok";
-    }
-
+    
     @Bean
     public DataSource dataSource() throws SQLException {
         if (dbUrl == null || dbUrl.isEmpty()) {
