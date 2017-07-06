@@ -3,11 +3,13 @@ package com.codedrinker.dao;
 import com.alibaba.fastjson.JSON;
 import com.codedrinker.db.DBDataSource;
 import com.codedrinker.entity.Activity;
+import com.codedrinker.exception.DBException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,10 +22,14 @@ public class ActivityDao {
     @Autowired
     private DBDataSource dbDataSource;
 
-    public void save(Activity activity) {
-        try (Connection connection = dbDataSource.getInstance().getConnection()) {
+    public void save(Activity activity) throws DBException {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = dbDataSource.getInstance().getConnection();
             String sql = "insert into activity (id,kind,title,description,date,time,location,user_id) values (?,?,?,?,?,?,?,?)";
-            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, UUID.randomUUID().toString());
             pstmt.setString(2, activity.getKind());
             pstmt.setString(3, activity.getTitle());
@@ -32,8 +38,24 @@ public class ActivityDao {
             pstmt.setString(6, activity.getTime());
             pstmt.setString(7, JSON.toJSONString(activity.getLocation()));
             pstmt.setString(8, activity.getUser().getId());
-            pstmt.execute();
+            pstmt.executeUpdate();
         } catch (Exception e) {
+            try {
+                pstmt.close();
+                connection.close();
+            } catch (SQLException e1) {
+
+            }
+
+            throw new DBException(e.getMessage());
+
+        } finally {
+            try {
+                pstmt.close();
+                connection.close();
+            } catch (SQLException e1) {
+
+            }
         }
     }
 

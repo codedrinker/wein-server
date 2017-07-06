@@ -21,6 +21,7 @@ import com.codedrinker.dao.ActivityDao;
 import com.codedrinker.entity.Activity;
 import com.codedrinker.entity.Authorization;
 import com.codedrinker.entity.ResponseDTO;
+import com.codedrinker.exception.DBException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -84,7 +85,11 @@ public class Main {
     @RequestMapping("/activity/new")
     @ResponseBody
     Object newActivity(@RequestBody Activity activity) {
-        activityDao.save(activity);
+        try {
+            activityDao.save(activity);
+        } catch (DBException e) {
+            return ResponseDTO.error(e.getMessage());
+        }
         return ResponseDTO.ok(activity);
     }
 
