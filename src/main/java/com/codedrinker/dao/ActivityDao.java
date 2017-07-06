@@ -32,7 +32,7 @@ public class ActivityDao {
 
         try {
             connection = dbDataSource.getInstance().getConnection();
-            String sql = "insert into activity (id,kind,title,description,date,time,location,user_id) values (?,?,?,?,?,?,?,?)";
+            String sql = "insert into activity (id,kind,title,description,date,time,location,user_id,utime,ctime) values (?,?,?,?,?,?,?,?,?,?)";
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, UUID.randomUUID().toString());
             pstmt.setInt(2, activity.getKind());
@@ -42,6 +42,8 @@ public class ActivityDao {
             pstmt.setString(6, activity.getTime());
             pstmt.setString(7, JSON.toJSONString(activity.getLocation()));
             pstmt.setString(8, activity.getUser().getId());
+            pstmt.setLong(9, System.currentTimeMillis());
+            pstmt.setLong(10, System.currentTimeMillis());
             pstmt.executeUpdate();
         } catch (Exception e) {
             try {
