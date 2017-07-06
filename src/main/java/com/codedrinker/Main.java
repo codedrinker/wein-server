@@ -87,6 +87,8 @@ public class Main {
             activityDao.save(activity);
         } catch (DBException e) {
             return ResponseDTO.error(e.getMessage());
+        } catch (Exception e) {
+            return ResponseDTO.error(e.getMessage());
         }
         return ResponseDTO.ok(activity);
     }
