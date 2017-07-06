@@ -32,23 +32,24 @@ public class ActivityDao {
 
         try {
             connection = dbDataSource.getInstance().getConnection();
+            String sql = "insert into activity (id,kind,title,description,date,time,location,user_id,utime,ctime) values (?,?,?,?,?,?,?,?,?,?)";
+            pstmt = connection.prepareStatement(sql);
             System.out.println(connection);
             System.out.println(pstmt);
             System.out.println(activity);
-            String sql = "insert into activity (id,kind,title,description,date,time,location,user_id,utime,ctime) values (?,?,?,?,?,?,?,?,?,?)";
-            pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, UUID.randomUUID().toString());
-            pstmt.setInt(2, activity.getKind());
-            pstmt.setString(3, activity.getTitle());
-            pstmt.setString(4, activity.getDescription());
-            pstmt.setString(5, activity.getDate());
-            pstmt.setString(6, activity.getTime());
+            pstmt.setInt(2, activity.getKind() != null ? activity.getKind() : 0);
+            pstmt.setString(3, activity.getTitle() != null ? activity.getTitle() : "");
+            pstmt.setString(4, activity.getDescription() != null ? activity.getDescription() : "");
+            pstmt.setString(5, activity.getDate() != null ? activity.getDate() : "");
+            pstmt.setString(6, activity.getTime() != null ? activity.getTime() : "");
             pstmt.setString(7, JSON.toJSONString(activity.getLocation()));
-            pstmt.setString(8, activity.getUser().getId());
+            pstmt.setString(8, activity.getUser() != null && activity.getUser().getId() != null ? activity.getUser().getId() : "");
             pstmt.setLong(9, System.currentTimeMillis());
             pstmt.setLong(10, System.currentTimeMillis());
             pstmt.executeUpdate();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             try {
                 pstmt.close();
                 connection.close();

@@ -82,10 +82,13 @@ public class Main {
     @ResponseBody
     Object newActivity(@RequestBody Activity activity) {
         try {
+            System.out.println(activity);
             activityDao.save(activity);
         } catch (DBException e) {
+            System.out.println(e);
             return ResponseDTO.error(e.getMessage());
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseDTO.error(e.getMessage());
         }
         return ResponseDTO.ok(activity);
