@@ -16,7 +16,6 @@ public class DBDataSource implements InitializingBean {
     @Value("${spring.datasource.url}")
     private String dbUrl;
 
-
     private static DataSource dataSource;
 
     public DataSource getInstance() {

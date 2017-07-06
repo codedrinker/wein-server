@@ -44,7 +44,7 @@ public class ActivityDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
-
+                throw new DBException(e1.getMessage());
             }
 
             throw new DBException(e.getMessage());
@@ -54,7 +54,7 @@ public class ActivityDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
-
+                throw new DBException(e1.getMessage());
             }
         }
     }

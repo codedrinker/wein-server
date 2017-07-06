@@ -35,8 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
 
 @Controller
@@ -91,23 +89,5 @@ public class Main {
             return ResponseDTO.error(e.getMessage());
         }
         return ResponseDTO.ok(activity);
-    }
-
-    @RequestMapping("/activity/create")
-    @ResponseBody
-    Object createActivity(HttpServletRequest request) {
-        try {
-            StringBuilder buffer = new StringBuilder();
-            BufferedReader reader = null;
-            reader = request.getReader();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line);
-            }
-            String payload = buffer.toString();
-            return ResponseDTO.ok(payload);
-        } catch (IOException e) {
-            return ResponseDTO.error(e.getMessage());
-        }
     }
 }
