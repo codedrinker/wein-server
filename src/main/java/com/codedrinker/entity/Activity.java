@@ -5,6 +5,7 @@ package com.codedrinker.entity;
  */
 
 public class Activity {
+    private String id;
     private Integer kind;
     private String title;
     private String description;
@@ -12,6 +13,14 @@ public class Activity {
     private String time;
     private Location location;
     private User user;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Integer getKind() {
         return kind;

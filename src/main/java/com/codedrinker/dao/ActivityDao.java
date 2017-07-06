@@ -3,13 +3,17 @@ package com.codedrinker.dao;
 import com.alibaba.fastjson.JSON;
 import com.codedrinker.db.DBDataSource;
 import com.codedrinker.entity.Activity;
+import com.codedrinker.entity.Location;
+import com.codedrinker.entity.User;
 import com.codedrinker.exception.DBException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,7 +63,51 @@ public class ActivityDao {
         }
     }
 
-    public List<Activity> listByUserId(String userId) {
-        return null;
+    public List<Activity> listByUserId(String userId) throws DBException {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        ResultSet resultSet = null;
+
+        List<Activity> activities = new ArrayList<>();
+
+        try {
+            connection = dbDataSource.getInstance().getConnection();
+            String sql = "select * from activity where user_id = ?";
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, userId);
+            resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                Activity activity = new Activity();
+                activity.setId(resultSet.getString("id"));
+                activity.setDate(resultSet.getString("date"));
+                activity.setTitle(resultSet.getString("title"));
+                activity.setDescription(resultSet.getString("description"));
+                activity.setKind(resultSet.getInt("kind"));
+                activity.setLocation(JSON.parseObject(resultSet.getString("location"), Location.class));
+                activity.setTime(resultSet.getString("time"));
+                User user = new User();
+                user.setId(resultSet.getString("user_id"));
+                activity.setUser(user);
+                activities.add(activity);
+            }
+        } catch (Exception e) {
+            try {
+                resultSet.close();
+                pstmt.close();
+                connection.close();
+            } catch (SQLException e1) {
+                throw new DBException(e1.getMessage());
+            }
+            throw new DBException(e.getMessage());
+
+        } finally {
+            try {
+                pstmt.close();
+                connection.close();
+            } catch (SQLException e1) {
+                throw new DBException(e1.getMessage());
+            }
+        }
+        return activities;
     }
 }
