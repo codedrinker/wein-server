@@ -5,7 +5,7 @@ package com.codedrinker.entity;
  */
 
 public class Activity {
-    private String kind;
+    private Integer kind;
     private String title;
     private String description;
     private String date;
@@ -13,11 +13,11 @@ public class Activity {
     private Location location;
     private User user;
 
-    public String getKind() {
+    public Integer getKind() {
         return kind;
     }
 
-    public void setKind(String kind) {
+    public void setKind(Integer kind) {
         this.kind = kind;
     }
 
