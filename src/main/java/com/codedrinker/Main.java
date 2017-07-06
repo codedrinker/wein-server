@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package com.example;
+package com.codedrinker;
 
 import com.alibaba.fastjson.JSON;
-import com.example.entity.Activity;
-import com.example.entity.Authorization;
-import com.example.entity.ResponseDTO;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.codedrinker.dao.ActivityDao;
+import com.codedrinker.entity.Activity;
+import com.codedrinker.entity.Authorization;
+import com.codedrinker.entity.ResponseDTO;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,24 +35,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.SQLException;
 
 @Controller
 @SpringBootApplication
+@ComponentScan
 public class Main {
-
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
-
-    @Autowired
-    private DataSource dataSource;
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);
     }
+
+    @Autowired
+    private ActivityDao activityDao;
 
     @RequestMapping("/")
     String index() {
@@ -90,6 +84,7 @@ public class Main {
     @RequestMapping("/activity/new")
     @ResponseBody
     Object newActivity(@RequestBody Activity activity) {
+        activityDao.save(activity);
         return ResponseDTO.ok(activity);
     }
 
@@ -110,16 +105,4 @@ public class Main {
             return ResponseDTO.error(e.getMessage());
         }
     }
-    
-    @Bean
-    public DataSource dataSource() throws SQLException {
-        if (dbUrl == null || dbUrl.isEmpty()) {
-            return new HikariDataSource();
-        } else {
-            HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(dbUrl);
-            return new HikariDataSource(config);
-        }
-    }
-
 }

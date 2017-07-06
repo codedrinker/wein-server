@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.codedrinker.entity;
 
 /**
  * Created by codedrinker on 02/07/2017.
