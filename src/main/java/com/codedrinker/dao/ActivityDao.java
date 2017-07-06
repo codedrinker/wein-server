@@ -104,6 +104,7 @@ public class ActivityDao {
 
         } finally {
             try {
+                resultSet.close();
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
