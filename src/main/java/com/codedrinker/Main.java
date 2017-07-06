@@ -30,12 +30,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @SpringBootApplication
@@ -91,5 +89,19 @@ public class Main {
             return ResponseDTO.error(e.getMessage());
         }
         return ResponseDTO.ok(activity);
+    }
+
+    @RequestMapping("/activity/{userId}")
+    @ResponseBody
+    Object activities(@PathVariable(value = "userId") String userId) {
+        List<Activity> activities;
+        try {
+            activities = activityDao.listByUserId(userId);
+        } catch (DBException e) {
+            return ResponseDTO.error(e.getMessage());
+        } catch (Exception e) {
+            return ResponseDTO.error(e.getMessage());
+        }
+        return ResponseDTO.ok(activities);
     }
 }
