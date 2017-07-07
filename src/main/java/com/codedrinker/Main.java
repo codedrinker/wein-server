@@ -17,23 +17,20 @@
 package com.codedrinker;
 
 import com.alibaba.fastjson.JSON;
-import com.codedrinker.dao.ActivityDao;
-import com.codedrinker.entity.Activity;
 import com.codedrinker.entity.Authorization;
 import com.codedrinker.entity.ResponseDTO;
-import com.codedrinker.exception.DBException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 @SpringBootApplication
@@ -43,9 +40,6 @@ public class Main {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);
     }
-
-    @Autowired
-    private ActivityDao activityDao;
 
     @RequestMapping("/")
     String index() {
@@ -75,34 +69,5 @@ public class Main {
             ResponseDTO.error(e.getMessage());
         }
         return ResponseDTO.error("Unknown");
-    }
-
-
-    @RequestMapping("/activity/new")
-    @ResponseBody
-    Object newActivity(@RequestBody Activity activity) {
-        try {
-            System.out.println(activity);
-            activityDao.save(activity);
-        } catch (DBException e) {
-            return ResponseDTO.error(e.getMessage());
-        } catch (Exception e) {
-            return ResponseDTO.error(e.getMessage());
-        }
-        return ResponseDTO.ok(activity);
-    }
-
-    @RequestMapping("/activity/{userId}")
-    @ResponseBody
-    Object activities(@PathVariable(value = "userId") String userId) {
-        List<Activity> activities;
-        try {
-            activities = activityDao.listByUserId(userId);
-        } catch (DBException e) {
-            return ResponseDTO.error(e.getMessage());
-        } catch (Exception e) {
-            return ResponseDTO.error(e.getMessage());
-        }
-        return ResponseDTO.ok(activities);
     }
 }
