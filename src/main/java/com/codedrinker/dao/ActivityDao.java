@@ -34,7 +34,9 @@ public class ActivityDao {
             connection = dbDataSource.getInstance().getConnection();
             String sql = "insert into activity (id,kind,title,description,date,time,location,user_id,utime,ctime) values (?,?,?,?,?,?,?,?,?,?)";
             pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, UUID.randomUUID().toString());
+            String id = UUID.randomUUID().toString();
+            activity.setId(id);
+            pstmt.setString(1, id);
             pstmt.setInt(2, activity.getKind() != null ? activity.getKind() : 0);
             pstmt.setString(3, activity.getTitle() != null ? activity.getTitle() : "");
             pstmt.setString(4, activity.getDescription() != null ? activity.getDescription() : "");
