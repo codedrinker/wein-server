@@ -74,7 +74,7 @@ public class UserDao {
             for (int i = 0; i < ids.size(); i++) {
                 builder.append("?,");
             }
-            String sql = "select * from user where id in ("
+            String sql = "select * from account where id in ("
                     + builder.deleteCharAt(builder.length() - 1).toString() +")";
 
             LogUtils.log("sql",sql);
@@ -121,7 +121,7 @@ public class UserDao {
         try {
             connection = dbDataSource.getInstance().getConnection();
             StringBuilder builder = new StringBuilder();
-            String sql = "select * from user where id=?";
+            String sql = "select * from account where id=?";
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, userId); // or whatever it applies
             resultSet = pstmt.executeQuery();
@@ -139,7 +139,6 @@ public class UserDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
-                throw new DBException(e1.getMessage());
             }
             throw new DBException(e.getMessage());
 
@@ -149,7 +148,6 @@ public class UserDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
-                throw new DBException(e1.getMessage());
             }
         }
         return null;

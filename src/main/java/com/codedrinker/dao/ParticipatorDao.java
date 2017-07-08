@@ -40,9 +40,7 @@ public class ParticipatorDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
-                throw new DBException(e1.getMessage());
             }
-
             throw new DBException(e.getMessage());
 
         } finally {
@@ -50,7 +48,6 @@ public class ParticipatorDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
-                throw new DBException(e1.getMessage());
             }
         }
     }
@@ -80,7 +77,6 @@ public class ParticipatorDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e2) {
-                throw new DBException(e2.getMessage());
             }
             throw new DBException(e.getMessage());
 
@@ -90,7 +86,6 @@ public class ParticipatorDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e2) {
-                throw new DBException(e2.getMessage());
             }
         }
         return participators;
@@ -121,7 +116,6 @@ public class ParticipatorDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e2) {
-                throw new DBException(e2.getMessage());
             }
             throw new DBException(e.getMessage());
 
@@ -131,7 +125,6 @@ public class ParticipatorDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e2) {
-                throw new DBException(e2.getMessage());
             }
         }
         return participators;
