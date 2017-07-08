@@ -16,12 +16,9 @@
 
 package com.codedrinker;
 
-import com.alibaba.fastjson.JSON;
-import com.codedrinker.entity.Authorization;
 import com.codedrinker.entity.ResponseDTO;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.codedrinker.service.AuthorizationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,12 +27,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-
 @Controller
 @SpringBootApplication
 @ComponentScan
 public class Main {
+
+    @Autowired
+    private AuthorizationService authorizationService;
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);
@@ -50,24 +48,7 @@ public class Main {
     @RequestMapping("/authorization")
     @ResponseBody
     Object authorization(@RequestParam String code) {
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wxf41c765f273813bf&secret=0f4a4cfe067f089536991218039dcac0&js_code=%s&grant_type=authorization_code";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .addHeader("content-type", "application/json")
-                .url(String.format(url, code))
-                .build();
-        try {
-            Response execute = okHttpClient.newCall(request).execute();
-            if (execute.isSuccessful()) {
-                Authorization authorization = JSON.parseObject(execute.body().string(), Authorization.class);
-                return ResponseDTO.ok(authorization);
-            } else {
-                return ResponseDTO.error(execute.message());
-            }
-
-        } catch (IOException e) {
-            ResponseDTO.error(e.getMessage());
-        }
-        return ResponseDTO.error("Unknown");
+        ResponseDTO authorize = authorizationService.authorize(code);
+        return authorize;
     }
 }

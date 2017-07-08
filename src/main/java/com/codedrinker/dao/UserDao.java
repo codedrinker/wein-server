@@ -1,9 +1,6 @@
 package com.codedrinker.dao;
 
-import com.alibaba.fastjson.JSON;
 import com.codedrinker.db.DBDataSource;
-import com.codedrinker.entity.Activity;
-import com.codedrinker.entity.Location;
 import com.codedrinker.entity.User;
 import com.codedrinker.exception.DBException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,35 +12,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by codedrinker on 07/07/2017.
  */
 @Repository
-public class ActivityDao {
+public class UserDao {
 
     @Autowired
     private DBDataSource dbDataSource;
 
-    public void save(Activity activity) throws DBException {
+    public void save(User user) throws DBException {
         Connection connection = null;
         PreparedStatement pstmt = null;
 
         try {
             connection = dbDataSource.getInstance().getConnection();
-            String sql = "insert into activity (id,kind,title,description,date,time,location,user_id,utime,ctime) values (?,?,?,?,?,?,?,?,?,?)";
+            String sql = "insert into account (id,nickname,avatarurl,gender,province,city,country,utime,ctime) values (?,?,?,?,?,?,?,?,?)";
             pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, UUID.randomUUID().toString());
-            pstmt.setInt(2, activity.getKind() != null ? activity.getKind() : 0);
-            pstmt.setString(3, activity.getTitle() != null ? activity.getTitle() : "");
-            pstmt.setString(4, activity.getDescription() != null ? activity.getDescription() : "");
-            pstmt.setString(5, activity.getDate() != null ? activity.getDate() : "");
-            pstmt.setString(6, activity.getTime() != null ? activity.getTime() : "");
-            pstmt.setString(7, JSON.toJSONString(activity.getLocation()));
-            pstmt.setString(8, activity.getUser() != null && activity.getUser().getId() != null ? activity.getUser().getId() : "");
+            pstmt.setString(1, user.getId());
+            pstmt.setString(2, user.getNickName());
+            pstmt.setString(3, user.getAvatarUrl());
+            pstmt.setInt(4, user.getGender());
+            pstmt.setString(5, user.getProvince());
+            pstmt.setString(6, user.getCity());
+            pstmt.setString(7, user.getCountry());
+            pstmt.setLong(8, System.currentTimeMillis());
             pstmt.setLong(9, System.currentTimeMillis());
-            pstmt.setLong(10, System.currentTimeMillis());
             pstmt.executeUpdate();
         } catch (Exception e) {
             try {
@@ -65,12 +60,12 @@ public class ActivityDao {
         }
     }
 
-    public List<Activity> listByIds(List<String> ids) throws DBException {
+    public List<User> listByIds(List<String> ids) throws DBException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet resultSet = null;
 
-        List<Activity> activities = new ArrayList<>();
+        List<User> users = new ArrayList<>();
 
         try {
             connection = dbDataSource.getInstance().getConnection();
@@ -78,7 +73,7 @@ public class ActivityDao {
             for (int i = 0; i < ids.size(); i++) {
                 builder.append("?,");
             }
-            String sql = "select * from activity where id in "
+            String sql = "select * from user where id in "
                     + builder.deleteCharAt(builder.length() - 1).toString();
             pstmt = connection.prepareStatement(sql);
             int index = 1;
@@ -87,18 +82,12 @@ public class ActivityDao {
             }
             resultSet = pstmt.executeQuery();
             while (resultSet.next()) {
-                Activity activity = new Activity();
-                activity.setId(resultSet.getString("id"));
-                activity.setDate(resultSet.getString("date"));
-                activity.setTitle(resultSet.getString("title"));
-                activity.setDescription(resultSet.getString("description"));
-                activity.setKind(resultSet.getInt("kind"));
-                activity.setLocation(JSON.parseObject(resultSet.getString("location"), Location.class));
-                activity.setTime(resultSet.getString("time"));
                 User user = new User();
-                user.setId(resultSet.getString("user_id"));
-                activity.setUser(user);
-                activities.add(activity);
+                user.setId(resultSet.getString("id"));
+                user.setAvatarUrl(resultSet.getString("avatarurl"));
+                user.setNickName(resultSet.getString("nickname"));
+                user.setGender(resultSet.getInt("gender"));
+                users.add(user);
             }
         } catch (Exception e) {
             try {
@@ -119,35 +108,28 @@ public class ActivityDao {
                 throw new DBException(e1.getMessage());
             }
         }
-        return activities;
+        return users;
     }
 
-    public List<Activity> listByUserId(String userId) throws DBException {
+    public User getById(String userId) throws DBException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet resultSet = null;
 
-        List<Activity> activities = new ArrayList<>();
-
         try {
             connection = dbDataSource.getInstance().getConnection();
-            String sql = "select * from activity where user_id = ?";
+            StringBuilder builder = new StringBuilder();
+            String sql = "select * from user where id=?";
             pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, userId);
+            pstmt.setString(1, userId); // or whatever it applies
             resultSet = pstmt.executeQuery();
             while (resultSet.next()) {
-                Activity activity = new Activity();
-                activity.setId(resultSet.getString("id"));
-                activity.setDate(resultSet.getString("date"));
-                activity.setTitle(resultSet.getString("title"));
-                activity.setDescription(resultSet.getString("description"));
-                activity.setKind(resultSet.getInt("kind"));
-                activity.setLocation(JSON.parseObject(resultSet.getString("location"), Location.class));
-                activity.setTime(resultSet.getString("time"));
                 User user = new User();
-                user.setId(resultSet.getString("user_id"));
-                activity.setUser(user);
-                activities.add(activity);
+                user.setId(resultSet.getString("id"));
+                user.setAvatarUrl(resultSet.getString("avatarurl"));
+                user.setNickName(resultSet.getString("nickname"));
+                user.setGender(resultSet.getInt("gender"));
+                return user;
             }
         } catch (Exception e) {
             try {
@@ -168,6 +150,6 @@ public class ActivityDao {
                 throw new DBException(e1.getMessage());
             }
         }
-        return activities;
+        return null;
     }
 }

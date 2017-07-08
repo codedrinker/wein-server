@@ -1,17 +1,14 @@
 package com.codedrinker.controller;
 
-import com.codedrinker.dao.ActivityDao;
 import com.codedrinker.entity.Activity;
+import com.codedrinker.entity.Authorization;
+import com.codedrinker.entity.Participator;
 import com.codedrinker.entity.ResponseDTO;
-import com.codedrinker.exception.DBException;
+import com.codedrinker.service.ActivityService;
+import com.codedrinker.service.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by codedrinker on 07/07/2017.
@@ -20,33 +17,37 @@ import java.util.List;
 public class ActivityController {
 
     @Autowired
-    private ActivityDao activityDao;
+    private ActivityService activityService;
 
-    @RequestMapping("/activity/new")
+    @Autowired
+    private AuthorizationService authorizationService;
+
+
+    @RequestMapping(value = "/activity/new", method = RequestMethod.POST)
     @ResponseBody
     Object newActivity(@RequestBody Activity activity) {
-        try {
-            System.out.println(activity);
-            activityDao.save(activity);
-        } catch (DBException e) {
-            return ResponseDTO.error(e.getMessage());
-        } catch (Exception e) {
-            return ResponseDTO.error(e.getMessage());
+        if (activity.getUser() != null && activity.getUser().getId() == null) {
+            ResponseDTO authorize = authorizationService.authorize(activity.getUser().getCode());
+            if (authorize.isOK()) {
+                activity.getUser().setId(((Authorization) authorize.getData()).getOpenid());
+            } else {
+                return ResponseDTO.unauthorized();
+            }
         }
-        return ResponseDTO.ok(activity);
+        ResponseDTO responseDTO = activityService.save(activity);
+        return responseDTO;
+    }
+
+    @RequestMapping(value = "/activity/attend", method = RequestMethod.POST)
+    @ResponseBody
+    Object attendActivity(@RequestBody Participator participator) {
+        ResponseDTO attend = activityService.attend(participator);
+        return attend;
     }
 
     @RequestMapping("/activity/{userId}")
     @ResponseBody
     Object activities(@PathVariable(value = "userId") String userId) {
-        List<Activity> activities;
-        try {
-            activities = activityDao.listByUserId(userId);
-        } catch (DBException e) {
-            return ResponseDTO.error(e.getMessage());
-        } catch (Exception e) {
-            return ResponseDTO.error(e.getMessage());
-        }
-        return ResponseDTO.ok(activities);
+        return activityService.listByUserId(userId);
     }
 }

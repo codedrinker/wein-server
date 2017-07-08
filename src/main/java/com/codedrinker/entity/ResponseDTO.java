@@ -46,4 +46,15 @@ public class ResponseDTO {
         responseDTO.setMessage(message);
         return responseDTO;
     }
+
+    public static ResponseDTO unauthorized() {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setStatus(401);
+        responseDTO.setMessage("unauthorized");
+        return responseDTO;
+    }
+
+    public boolean isOK() {
+        return this.status == 200;
+    }
 }
