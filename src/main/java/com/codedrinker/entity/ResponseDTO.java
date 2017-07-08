@@ -57,4 +57,11 @@ public class ResponseDTO {
     public boolean isOK() {
         return this.status == 200;
     }
+
+    public static ResponseDTO notFound() {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setStatus(404);
+        responseDTO.setMessage("not found");
+        return responseDTO;
+    }
 }

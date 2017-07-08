@@ -1,5 +1,8 @@
 package com.codedrinker.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by codedrinker on 01/07/2017.
  */
@@ -13,6 +16,16 @@ public class Activity {
     private String time;
     private Location location;
     private User user;
+
+    List<User> participators = new ArrayList<>();
+
+    public List<User> getParticipators() {
+        return participators;
+    }
+
+    public void setParticipators(List<User> participators) {
+        this.participators = participators;
+    }
 
     public String getId() {
         return id;

@@ -45,6 +45,13 @@ public class ActivityController {
         return attend;
     }
 
+  @RequestMapping(value = "/activity/show", method = RequestMethod.GET)
+    @ResponseBody
+    Object showActivity(@RequestParam(name = "id") String id) {
+      ResponseDTO activity = activityService.getById(id);
+        return activity;
+    }
+
     @RequestMapping("/activity/{userId}")
     @ResponseBody
     Object activities(@PathVariable(value = "userId") String userId) {

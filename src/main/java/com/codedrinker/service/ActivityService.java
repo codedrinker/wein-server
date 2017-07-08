@@ -74,4 +74,25 @@ public class ActivityService {
             return ResponseDTO.error(e.getMessage());
         }
     }
+
+    public ResponseDTO getById(String id) {
+        try {
+            Activity activity = activityDao.getById(id);
+            if (activity != null) {
+                List<Participator> participators = participatorDao.listByActivityId(activity.getId());
+
+                List<String> ids = new ArrayList<>();
+                for (Participator participator : participators) {
+                    ids.add(participator.getUserId());
+                }
+                List<User> users = userDao.listByIds(ids);
+                activity.setParticipators(users);
+                return ResponseDTO.ok(activity);
+            } else {
+                return ResponseDTO.notFound();
+            }
+        } catch (DBException e) {
+            return ResponseDTO.error(e.getMessage());
+        }
+    }
 }

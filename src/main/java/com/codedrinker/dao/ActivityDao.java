@@ -170,4 +170,48 @@ public class ActivityDao {
         }
         return activities;
     }
+
+    public Activity getById(String id) throws DBException {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = dbDataSource.getInstance().getConnection();
+            String sql = "select * from activity where id = ?";
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, id);
+            resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                Activity activity = new Activity();
+                activity.setId(resultSet.getString("id"));
+                activity.setDate(resultSet.getString("date"));
+                activity.setTitle(resultSet.getString("title"));
+                activity.setDescription(resultSet.getString("description"));
+                activity.setKind(resultSet.getInt("kind"));
+                activity.setLocation(JSON.parseObject(resultSet.getString("location"), Location.class));
+                activity.setTime(resultSet.getString("time"));
+                return activity;
+            }
+        } catch (Exception e) {
+            try {
+                resultSet.close();
+                pstmt.close();
+                connection.close();
+            } catch (SQLException e1) {
+                throw new DBException(e1.getMessage());
+            }
+            throw new DBException(e.getMessage());
+
+        } finally {
+            try {
+                resultSet.close();
+                pstmt.close();
+                connection.close();
+            } catch (SQLException e1) {
+                throw new DBException(e1.getMessage());
+            }
+        }
+        return null;
+    }
 }
