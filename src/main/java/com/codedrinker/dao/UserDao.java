@@ -26,7 +26,6 @@ public class UserDao {
     public void save(User user) throws DBException {
         Connection connection = null;
         PreparedStatement pstmt = null;
-
         try {
             connection = dbDataSource.getInstance().getConnection();
             String sql = "insert into account (id,nickname,avatarurl,gender,province,city,country,utime,ctime) values (?,?,?,?,?,?,?,?,?)";
@@ -46,9 +45,9 @@ public class UserDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
-                throw new DBException(e1.getMessage());
+                e1.printStackTrace();
             }
-
+            e.printStackTrace();
             throw new DBException(e.getMessage());
 
         } finally {
@@ -56,6 +55,7 @@ public class UserDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
                 throw new DBException(e1.getMessage());
             }
         }
@@ -75,9 +75,9 @@ public class UserDao {
                 builder.append("?,");
             }
             String sql = "select * from account where id in ("
-                    + builder.deleteCharAt(builder.length() - 1).toString() +")";
+                    + builder.deleteCharAt(builder.length() - 1).toString() + ")";
 
-            LogUtils.log("sql",sql);
+            LogUtils.log("sql", sql);
             pstmt = connection.prepareStatement(sql);
             int index = 1;
             for (String id : ids) {
@@ -93,11 +93,13 @@ public class UserDao {
                 users.add(user);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 resultSet.close();
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
                 throw new DBException(e1.getMessage());
             }
             throw new DBException(e.getMessage());
@@ -134,11 +136,13 @@ public class UserDao {
                 return user;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 resultSet.close();
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
             throw new DBException(e.getMessage());
 
@@ -148,6 +152,7 @@ public class UserDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
         }
         return null;

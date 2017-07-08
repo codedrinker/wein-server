@@ -36,10 +36,12 @@ public class ParticipatorDao {
             pstmt.setLong(4, System.currentTimeMillis());
             pstmt.executeUpdate();
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
             throw new DBException(e.getMessage());
 
@@ -48,6 +50,7 @@ public class ParticipatorDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
         }
     }
@@ -72,11 +75,13 @@ public class ParticipatorDao {
                 participators.add(participator);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 resultSet.close();
                 pstmt.close();
                 connection.close();
             } catch (SQLException e2) {
+                e2.printStackTrace();
             }
             throw new DBException(e.getMessage());
 
@@ -86,6 +91,7 @@ public class ParticipatorDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
         return participators;
@@ -111,11 +117,13 @@ public class ParticipatorDao {
                 participators.add(participator);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 resultSet.close();
                 pstmt.close();
                 connection.close();
             } catch (SQLException e2) {
+                e2.printStackTrace();
             }
             throw new DBException(e.getMessage());
 
@@ -125,6 +133,7 @@ public class ParticipatorDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
         return participators;

@@ -48,10 +48,12 @@ public class ActivityDao {
             pstmt.setLong(10, System.currentTimeMillis());
             pstmt.executeUpdate();
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
 
             throw new DBException(e.getMessage());
@@ -61,6 +63,7 @@ public class ActivityDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
         }
     }
@@ -101,11 +104,13 @@ public class ActivityDao {
                 activities.add(activity);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 resultSet.close();
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
             throw new DBException(e.getMessage());
 
@@ -115,6 +120,7 @@ public class ActivityDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
                 throw new DBException(e1.getMessage());
             }
         }
@@ -149,11 +155,13 @@ public class ActivityDao {
                 activities.add(activity);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 resultSet.close();
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
             throw new DBException(e.getMessage());
 
@@ -163,6 +171,7 @@ public class ActivityDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
                 throw new DBException(e1.getMessage());
             }
         }
@@ -192,11 +201,13 @@ public class ActivityDao {
                 return activity;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 resultSet.close();
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
             throw new DBException(e.getMessage());
 
@@ -206,6 +217,7 @@ public class ActivityDao {
                 pstmt.close();
                 connection.close();
             } catch (SQLException e1) {
+                e1.printStackTrace();
             }
         }
         return null;
