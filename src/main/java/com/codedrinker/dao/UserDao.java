@@ -3,6 +3,7 @@ package com.codedrinker.dao;
 import com.codedrinker.db.DBDataSource;
 import com.codedrinker.entity.User;
 import com.codedrinker.exception.DBException;
+import com.codedrinker.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -73,8 +74,10 @@ public class UserDao {
             for (int i = 0; i < ids.size(); i++) {
                 builder.append("?,");
             }
-            String sql = "select * from user where id in "
-                    + builder.deleteCharAt(builder.length() - 1).toString();
+            String sql = "select * from user where id in ("
+                    + builder.deleteCharAt(builder.length() - 1).toString() +")";
+
+            LogUtils.log("sql",sql);
             pstmt = connection.prepareStatement(sql);
             int index = 1;
             for (String id : ids) {
@@ -98,7 +101,6 @@ public class UserDao {
                 throw new DBException(e1.getMessage());
             }
             throw new DBException(e.getMessage());
-
         } finally {
             try {
                 resultSet.close();
