@@ -8,6 +8,7 @@ import com.codedrinker.entity.Participator;
 import com.codedrinker.entity.ResponseDTO;
 import com.codedrinker.entity.User;
 import com.codedrinker.exception.DBException;
+import com.codedrinker.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -78,13 +79,15 @@ public class ActivityService {
     public ResponseDTO getById(String id) {
         try {
             Activity activity = activityDao.getById(id);
+            LogUtils.log("activity", activity);
             if (activity != null) {
                 List<Participator> participators = participatorDao.listByActivityId(activity.getId());
-
+                LogUtils.log("participators", participators);
                 List<String> ids = new ArrayList<>();
                 for (Participator participator : participators) {
                     ids.add(participator.getUserId());
                 }
+                LogUtils.log("ids", ids);
                 List<User> users = userDao.listByIds(ids);
                 activity.setParticipators(users);
                 return ResponseDTO.ok(activity);

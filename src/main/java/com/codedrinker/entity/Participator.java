@@ -49,4 +49,15 @@ public class Participator {
     public void setActivityId(String activityId) {
         this.activityId = activityId;
     }
+
+    @Override
+    public String toString() {
+        return "Participator{" +
+                "utime=" + utime +
+                ", ctime=" + ctime +
+                ", userId='" + userId + '\'' +
+                ", activityId='" + activityId + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }
