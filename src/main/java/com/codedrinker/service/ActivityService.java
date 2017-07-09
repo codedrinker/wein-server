@@ -69,10 +69,10 @@ public class ActivityService {
         }
     }
 
-    public ResponseDTO listByUserId(String userId, String uid) {
+    public ResponseDTO listByUserId(String uid) {
         List<Activity> activities;
         try {
-            List<Participator> participators = participatorDao.listByUserId(userId);
+            List<Participator> participators = participatorDao.listByUserId(uid);
 
             List<String> ids = new ArrayList<>();
             for (Participator participator : participators) {
