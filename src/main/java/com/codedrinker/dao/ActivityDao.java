@@ -198,6 +198,9 @@ public class ActivityDao {
                 activity.setKind(resultSet.getInt("kind"));
                 activity.setLocation(JSON.parseObject(resultSet.getString("location"), Location.class));
                 activity.setTime(resultSet.getString("time"));
+                User user = new User();
+                user.setId(resultSet.getString("user_id"));
+                activity.setUser(user);
                 return activity;
             }
         } catch (Exception e) {

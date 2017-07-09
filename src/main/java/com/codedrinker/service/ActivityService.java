@@ -94,6 +94,14 @@ public class ActivityService {
                 LogUtils.log("ids", ids);
                 List<User> users = userDao.listByIds(ids);
                 activity.setParticipators(users);
+
+                for (User user : users) {
+                    if (user.getId() == activity.getUser().getId()) {
+                        activity.setUser(user);
+                        break;
+                    }
+                }
+
                 return ResponseDTO.ok(activity);
             } else {
                 return ResponseDTO.notFound();
