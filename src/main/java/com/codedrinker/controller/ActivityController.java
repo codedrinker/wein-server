@@ -54,9 +54,9 @@ public class ActivityController {
         return activity;
     }
 
-    @RequestMapping("/activity/{userId}")
+    @RequestMapping("/activities")
     @ResponseBody
-    Object activities(@PathVariable(value = "userId") String userId, @RequestParam(name = "uid", required = false, defaultValue = "") String uid) {
+    Object activities(@RequestParam(name = "uid", required = false, defaultValue = "") String uid) {
         return activityService.listByUserId(uid);
     }
 }
