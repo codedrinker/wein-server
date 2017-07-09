@@ -6,6 +6,7 @@ import com.codedrinker.entity.Participator;
 import com.codedrinker.entity.ResponseDTO;
 import com.codedrinker.service.ActivityService;
 import com.codedrinker.service.AuthorizationService;
+import com.codedrinker.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,7 @@ public class ActivityController {
     @RequestMapping(value = "/activity/attend", method = RequestMethod.POST)
     @ResponseBody
     Object attendActivity(@RequestBody Participator participator) {
+        LogUtils.log("participator", participator);
         ResponseDTO attend = activityService.attend(participator);
         return attend;
     }

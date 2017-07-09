@@ -56,10 +56,10 @@ public class ActivityService {
             if (user == null) {
                 userDao.save(participator.getUser());
             }
+            return ResponseDTO.ok(participator);
         } catch (DBException e) {
             return ResponseDTO.error(e.getMessage());
         }
-        return ResponseDTO.error("Unknown");
     }
 
     public ResponseDTO listByUserId(String userId) {
