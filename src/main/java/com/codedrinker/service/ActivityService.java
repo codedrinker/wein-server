@@ -12,6 +12,7 @@ import com.codedrinker.utils.LogUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +102,7 @@ public class ActivityService {
                 activity.setOwner(StringUtils.equals(uid, activity.getUser().getId()));
                 activity.setAttended(ids.contains(uid));
                 LogUtils.log("ids", ids);
+                LogUtils.log("uid",uid);
                 List<User> users = userDao.listByIds(ids);
                 activity.setParticipators(users);
 
