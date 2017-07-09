@@ -96,7 +96,7 @@ public class ActivityService {
                 activity.setParticipators(users);
 
                 for (User user : users) {
-                    if (user.getId() == activity.getUser().getId()) {
+                    if (user.getId().equals(activity.getUser().getId())) {
                         activity.setUser(user);
                         break;
                     }
