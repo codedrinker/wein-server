@@ -16,6 +16,24 @@ public class Activity {
     private String time;
     private Location location;
     private User user;
+    private boolean isOwner;
+    private boolean isAttended;
+
+    public boolean isAttended() {
+        return isAttended;
+    }
+
+    public void setAttended(boolean attended) {
+        isAttended = attended;
+    }
+
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
+    }
 
     List<User> participators = new ArrayList<>();
 

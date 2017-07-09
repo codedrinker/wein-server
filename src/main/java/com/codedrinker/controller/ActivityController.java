@@ -49,14 +49,14 @@ public class ActivityController {
 
     @RequestMapping(value = "/activity/show", method = RequestMethod.GET)
     @ResponseBody
-    Object showActivity(@RequestParam(name = "id") String id) {
-        ResponseDTO activity = activityService.getById(id);
+    Object showActivity(@RequestParam(name = "id") String id, @RequestParam(name = "uid") String uid) {
+        ResponseDTO activity = activityService.getById(id, uid);
         return activity;
     }
 
     @RequestMapping("/activity/{userId}")
     @ResponseBody
-    Object activities(@PathVariable(value = "userId") String userId) {
-        return activityService.listByUserId(userId);
+    Object activities(@PathVariable(value = "userId") String userId, @RequestParam(name = "uid", required = false, defaultValue = "") String uid) {
+        return activityService.listByUserId(userId, uid);
     }
 }

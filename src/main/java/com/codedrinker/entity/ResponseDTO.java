@@ -64,4 +64,11 @@ public class ResponseDTO {
         responseDTO.setMessage("not found");
         return responseDTO;
     }
+
+    public static ResponseDTO exist() {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setStatus(302);
+        responseDTO.setMessage("exist");
+        return responseDTO;
+    }
 }

@@ -9,6 +9,7 @@ import com.codedrinker.entity.ResponseDTO;
 import com.codedrinker.entity.User;
 import com.codedrinker.exception.DBException;
 import com.codedrinker.utils.LogUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,6 +52,12 @@ public class ActivityService {
 
     public ResponseDTO attend(Participator participator) {
         try {
+            List<Participator> participators = participatorDao.listByActivityId(participator.getActivityId());
+            for (Participator dbParticipator : participators) {
+                if (dbParticipator.getUserId() == participator.getUserId()) {
+                    return ResponseDTO.exist();
+                }
+            }
             participatorDao.save(participator);
             User user = userDao.getById(participator.getUserId());
             if (user == null) {
@@ -62,7 +69,7 @@ public class ActivityService {
         }
     }
 
-    public ResponseDTO listByUserId(String userId) {
+    public ResponseDTO listByUserId(String userId, String uid) {
         List<Activity> activities;
         try {
             List<Participator> participators = participatorDao.listByUserId(userId);
@@ -80,7 +87,7 @@ public class ActivityService {
         }
     }
 
-    public ResponseDTO getById(String id) {
+    public ResponseDTO getById(String id, String uid) {
         try {
             Activity activity = activityDao.getById(id);
             LogUtils.log("activity", activity);
@@ -91,12 +98,14 @@ public class ActivityService {
                 for (Participator participator : participators) {
                     ids.add(participator.getUserId());
                 }
+                activity.setOwner(StringUtils.equals(uid, activity.getUser().getId()));
+                activity.setAttended(ids.contains(uid));
                 LogUtils.log("ids", ids);
                 List<User> users = userDao.listByIds(ids);
                 activity.setParticipators(users);
 
                 for (User user : users) {
-                    if (user.getId().equals(activity.getUser().getId())) {
+                    if (StringUtils.equals(user.getId(), activity.getUser().getId())) {
                         activity.setUser(user);
                         break;
                     }
