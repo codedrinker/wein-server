@@ -81,8 +81,8 @@ public class ActivityDao {
             for (int i = 0; i < ids.size(); i++) {
                 builder.append("?,");
             }
-            String sql = "select * from activity where id in "
-                    + builder.deleteCharAt(builder.length() - 1).toString();
+            String sql = "select * from activity where id in ("
+                    + builder.deleteCharAt(builder.length() - 1).toString() + ")";
             pstmt = connection.prepareStatement(sql);
             int index = 1;
             for (String id : ids) {
