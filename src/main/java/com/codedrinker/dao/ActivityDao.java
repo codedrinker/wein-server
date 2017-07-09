@@ -82,7 +82,7 @@ public class ActivityDao {
                 builder.append("?,");
             }
             String sql = "select * from activity where id in ("
-                    + builder.deleteCharAt(builder.length() - 1).toString() + ")";
+                    + builder.deleteCharAt(builder.length() - 1).toString() + ") order by date desc, time desc";
             pstmt = connection.prepareStatement(sql);
             int index = 1;
             for (String id : ids) {
