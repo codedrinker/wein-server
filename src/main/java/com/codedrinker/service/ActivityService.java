@@ -54,7 +54,7 @@ public class ActivityService {
             participatorDao.save(participator);
             User user = userDao.getById(participator.getUserId());
             if (user == null) {
-                userDao.save(user);
+                userDao.save(participator.getUser());
             }
         } catch (DBException e) {
             return ResponseDTO.error(e.getMessage());
