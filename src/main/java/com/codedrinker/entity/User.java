@@ -96,4 +96,20 @@ public class User {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "nickName='" + nickName + '\'' +
+                ", gender=" + gender +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", id='" + id + '\'' +
+                ", code='" + code + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", utime=" + utime +
+                ", ctime=" + ctime +
+                '}';
+    }
 }
