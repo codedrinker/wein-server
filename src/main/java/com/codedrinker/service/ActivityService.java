@@ -12,7 +12,6 @@ import com.codedrinker.utils.LogUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +33,7 @@ public class ActivityService {
 
     public ResponseDTO save(Activity activity) {
         try {
+            LogUtils.log("new activity", activity);
             activityDao.save(activity);
             Participator participator = new Participator();
             participator.setUserId(activity.getUser().getId());
@@ -103,7 +103,7 @@ public class ActivityService {
                 activity.setAttended(ids.contains(uid));
                 activity.setUncommitted(!activity.isAttended());
                 LogUtils.log("ids", ids);
-                LogUtils.log("uid",uid);
+                LogUtils.log("uid", uid);
                 List<User> users = userDao.listByIds(ids);
                 activity.setParticipators(users);
 

@@ -7,6 +7,7 @@ import com.codedrinker.entity.ResponseDTO;
 import com.codedrinker.service.ActivityService;
 import com.codedrinker.service.AuthorizationService;
 import com.codedrinker.utils.LogUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class ActivityController {
     @RequestMapping(value = "/activity/new", method = RequestMethod.POST)
     @ResponseBody
     Object newActivity(@RequestBody Activity activity) {
-        if (activity.getUser() != null && activity.getUser().getId() == null) {
+        if (activity.getUser() != null && StringUtils.isBlank(activity.getUser().getId())) {
             ResponseDTO authorize = authorizationService.authorize(activity.getUser().getCode());
             if (authorize.isOK()) {
                 activity.getUser().setId(((Authorization) authorize.getData()).getOpenid());
