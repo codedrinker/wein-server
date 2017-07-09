@@ -18,6 +18,15 @@ public class Activity {
     private User user;
     private boolean isOwner;
     private boolean isAttended;
+    private boolean uncommitted;
+
+    public boolean isUncommitted() {
+        return uncommitted;
+    }
+
+    public void setUncommitted(boolean uncommitted) {
+        this.uncommitted = uncommitted;
+    }
 
     public boolean isAttended() {
         return isAttended;

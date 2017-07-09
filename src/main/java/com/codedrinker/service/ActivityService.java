@@ -101,6 +101,7 @@ public class ActivityService {
                 }
                 activity.setOwner(StringUtils.equals(uid, activity.getUser().getId()));
                 activity.setAttended(ids.contains(uid));
+                activity.setUncommitted(!activity.isAttended());
                 LogUtils.log("ids", ids);
                 LogUtils.log("uid",uid);
                 List<User> users = userDao.listByIds(ids);
