@@ -55,6 +55,13 @@ public class ActivityController {
         return activity;
     }
 
+    @RequestMapping(value = "/activity/participators", method = RequestMethod.GET)
+    @ResponseBody
+    Object participators(@RequestParam(name = "id") String id, @RequestParam(name = "uid") String uid) {
+        ResponseDTO participators = activityService.getParticipators(id, uid);
+        return participators;
+    }
+
     @RequestMapping("/activities")
     @ResponseBody
     Object activities(@RequestParam(name = "uid", required = false, defaultValue = "") String uid) {

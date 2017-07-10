@@ -122,4 +122,18 @@ public class ActivityService {
             return ResponseDTO.error(e.getMessage());
         }
     }
+
+    public ResponseDTO getParticipators(String id, String uid) {
+        try {
+            List<Participator> participators = participatorDao.listByActivityId(id);
+            List<String> ids = new ArrayList<>();
+            for (Participator participator : participators) {
+                ids.add(participator.getUserId());
+            }
+            List<User> users = userDao.listByIds(ids);
+            return ResponseDTO.ok(users);
+        } catch (DBException e) {
+            return ResponseDTO.error(e.getMessage());
+        }
+    }
 }
