@@ -71,6 +71,11 @@ public class UserDao {
         try {
             connection = dbDataSource.getInstance().getConnection();
             StringBuilder builder = new StringBuilder();
+
+            if (ids == null || ids.size() == 0) {
+                return new ArrayList<>();
+            }
+
             for (int i = 0; i < ids.size(); i++) {
                 builder.append("?,");
             }
